@@ -32,3 +32,4 @@ C:\Users\zohrs\OneDrive\Documents\School\CSharp2\Lektion01\FriendsApi\obj\Debug\
 C:\Users\zohrs\OneDrive\Documents\School\CSharp2\Lektion01\FriendsApi\obj\Debug\net9.0\FriendsApi.genruntimeconfig.cache
 C:\Users\zohrs\OneDrive\Documents\School\CSharp2\Lektion01\FriendsApi\obj\Debug\net9.0\ref\FriendsApi.dll
 C:\Users\zohrs\OneDrive\Documents\School\CSharp2\Lektion01\FriendsApi\bin\Debug\net9.0\Data\friends.json
+C:\Users\zohrs\OneDrive\Documents\School\CSharp2\Lektion01\FriendsApi\obj\Debug\net9.0\FriendsApi.sourcelink.json
