@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "firstName": "Felicia",
+        "lastName": "Oreholm",
+        "age": 54,
+        "relationType":"Best Friend"
+    },
+    {
+        "id": 2,
+        "firstName": "Hamid",
+        "lastName": "Ghanavi",
+        "age": 39,
+        "relationType":"Close Friend"
+    },
+    {
+        "id": 3,
+        "firstName": "Azin",
+        "lastName": "Khosravi",
+        "age": 39,
+        "relationType":"Friend"
+    },
+    {
+        "id": 4,
+        "firstName": "Saeed",
+        "lastName": "Alaie",
+        "age": 38,
+        "relationType": "Friend"
+    },
+    {
+        "id": 5,
+        "firstName": "Sara",
+        "lastName": "Dalvig",
+        "age": 36,
+        "relationType": "Friend"
+    }
+]
