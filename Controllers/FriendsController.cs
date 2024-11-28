@@ -29,7 +29,13 @@ public class FriendsController : ControllerBase
         var path = string.Concat(_environment.ContentRootPath, "/Data/friends.json");
         var friends = Storage<Friend>.ReadJson(path);
         var friend = friends.FirstOrDefault(v => v.RelationType == "Best Friend");
-        return Ok(new { success = true, data = friend });
+        
+        if (friend is not null)
+        {
+            return Ok(new { success = true, data = friend });
+        }
+
+        return NotFound();
     }
 }
 
