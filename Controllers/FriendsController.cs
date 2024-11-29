@@ -9,22 +9,22 @@ namespace FriendsApi.Controllers;
 [ApiController]
 [Route("/api/v1/[controller]")]
 public class FriendsController : ControllerBase
-{   
-        private readonly IWebHostEnvironment _environment;
+{
+    private readonly IWebHostEnvironment _environment;
     private string path;
 
     public FriendsController(IWebHostEnvironment environment)
     {
-           _environment = environment;
-        
+        _environment = environment;
+
     }
     [HttpGet()]
     public ActionResult ListFriends()
-     {
+    {
         var path = string.Concat(_environment.ContentRootPath, "/Data/friends.json");
         var friends = Storage<Friend>.ReadJson(path);
-        return Ok(new { success = true, data = friends});
-     }
+        return Ok(new { success = true, data = friends });
+    }
 
     [HttpGet("relation/{relationType}")]
     public ActionResult FindFriend(string relationType)

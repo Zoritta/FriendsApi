@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using FriendsApi.Models;
 
@@ -5,19 +6,29 @@ namespace FriendsApi.Utilities;
 
 public class Storage<T>
 {
+    private static JsonSerializerOptions _options= new()
+    {
+    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+    WriteIndented = true
+    };
+
+    
      public  static List<T>ReadJson(string path)
      {
-        var options = new JsonSerializerOptions
+        _options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         };
         var json = File.ReadAllText(path);
-        var result = JsonSerializer.Deserialize<List<T>>(json, options);
+        var result = JsonSerializer.Deserialize<List<T>>(json, _options);
         return result;
      }
 
-    internal static void WriteJson(object value, List<Friend> list)
+    public static void WriteJson(string path, List<T> data)
     {
-        throw new NotImplementedException();
+        var json = JsonSerializer.Serialize(data, _options);
+        File.WriteAllText(path, json);
+
     }
 }
