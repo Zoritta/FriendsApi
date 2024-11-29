@@ -15,4 +15,9 @@ public class Storage<T>
         var result = JsonSerializer.Deserialize<List<T>>(json, options);
         return result;
      }
+
+    internal static void WriteJson(object value, List<Friend> list)
+    {
+        throw new NotImplementedException();
+    }
 }
