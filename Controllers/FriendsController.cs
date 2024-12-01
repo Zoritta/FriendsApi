@@ -107,12 +107,12 @@ public class FriendsController : ControllerBase
         Friend.Remove(toDelete);
         Storage<Friend>.WriteJson(path, friends);
     }
-    private void Update(int id, Friend updatedFriend)
+    private void Update(int id, Friend toUpdateFriend)
     {
         var path = string.Concat(_environment.ContentRootPath, "/Data/friends.json");
         var friends = Storage<Friend>.ReadJson(path);
         var filteredList = friends.FindAll(vehicle => vehicle.Id != id);
-        filteredList.Add(updatedFriend);
+        filteredList.Add(toUpdateFriend);
         Storage<Friend>.WriteJson(path, filteredList);
     }
 
