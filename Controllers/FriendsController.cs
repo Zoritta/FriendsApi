@@ -91,26 +91,27 @@ public class FriendsController : ControllerBase
 
         return friend;
     }
-    private void Save(List<Friend> list)
-    {
-        Storage<Friend>.WriteJson(_path, list);
-    }
+
 
     private void Remove(int id)
     {
         var toDelete = _friends.SingleOrDefault(Friend => Friend.Id == id);
         Friend.Remove(toDelete);
-        Storage<Friend>.WriteJson(_path, _friends);
+        Save(_friends);
     }
     private void Update(int id, Friend toUpdateFriend)
     {
         var filteredList = _friends.FindAll(vehicle => vehicle.Id != id);
         filteredList.Add(toUpdateFriend);
-        Storage<Friend>.WriteJson(_path, filteredList);
+        Save(filteredList);
     }
     private List<Friend> LoadFriends()
     {
         return Storage<Friend>.ReadJson(_path);
+    }
+    private void Save(List<Friend> list)
+    {
+        Storage<Friend>.WriteJson(_path, list);
     }
 
 }
