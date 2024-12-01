@@ -11,33 +11,34 @@ namespace FriendsApi.Controllers;
 public class FriendsController : ControllerBase
 {
     private readonly IWebHostEnvironment _environment;
-    private string path;
+    private readonly string _path;
+    private readonly List<Friend> _friends;
+
 
     public FriendsController(IWebHostEnvironment environment)
     {
         _environment = environment;
+        _path = string.Concat(_environment.ContentRootPath, "/Data/friends.json");
+        _friends = LoadFriends();
+
 
     }
     [HttpGet()]
     public ActionResult ListFriends()
     {
-        var path = string.Concat(_environment.ContentRootPath, "/Data/friends.json");
-        var friends = Storage<Friend>.ReadJson(path);
-        return Ok(new { success = true, data = friends });
+        return Ok(new { success = true, data = _friends });
     }
 
     [HttpGet("relation/{relationType}")]
     public ActionResult FindFriend(string relationType)
     {
-        var path = string.Concat(_environment.ContentRootPath, "/Data/friends.json");
-        var friends = Storage<Friend>.ReadJson(path);
 
-        if (friends == null || !friends.Any())
+        if (_friends == null || !_friends.Any())
         {
             return NotFound(new { success = false, message = "No friends found." });
         }
         var normalizedInput = relationType.Replace(" ", "").ToLower();
-        var matchingFriends = friends
+        var matchingFriends = _friends
             .Where(v => v.RelationType.Replace(" ", "").ToLower() == normalizedInput)
             .ToList();
 
@@ -53,9 +54,7 @@ public class FriendsController : ControllerBase
     [HttpGet("id/{id}")]
     public ActionResult GetFriendById(int id)
     {
-        var path = string.Concat(_environment.ContentRootPath, "/Data/friends.json");
-        var friends = Storage<Friend>.ReadJson(path);
-        var friend = friends.SingleOrDefault(v => v.Id == id);
+        var friend = _friends.SingleOrDefault(v => v.Id == id);
 
         if (friend is not null)
         {
@@ -86,34 +85,32 @@ public class FriendsController : ControllerBase
     }
     private Friend Create(Friend friend)
     {
-        var path = string.Concat(_environment.ContentRootPath, "/Data/friends.json");
-        var friends = Storage<Friend>.ReadJson(path);
-        friend.Id = friends.Count + 1;
-        friends.Add(friend);
-        Save(friends);
+        friend.Id = _friends.Count + 1;
+        _friends.Add(friend);
+        Save(_friends);
 
         return friend;
     }
     private void Save(List<Friend> list)
     {
-        Storage<Friend>.WriteJson(path = string.Concat(_environment.ContentRootPath, "/Data/friends.json"), list);
+        Storage<Friend>.WriteJson(_path, list);
     }
 
     private void Remove(int id)
     {
-        var path = string.Concat(_environment.ContentRootPath, "/Data/friends.json");
-        var friends = Storage<Friend>.ReadJson(path);
-        var toDelete = friends.SingleOrDefault(Friend => Friend.Id == id);
+        var toDelete = _friends.SingleOrDefault(Friend => Friend.Id == id);
         Friend.Remove(toDelete);
-        Storage<Friend>.WriteJson(path, friends);
+        Storage<Friend>.WriteJson(_path, _friends);
     }
     private void Update(int id, Friend toUpdateFriend)
     {
-        var path = string.Concat(_environment.ContentRootPath, "/Data/friends.json");
-        var friends = Storage<Friend>.ReadJson(path);
-        var filteredList = friends.FindAll(vehicle => vehicle.Id != id);
+        var filteredList = _friends.FindAll(vehicle => vehicle.Id != id);
         filteredList.Add(toUpdateFriend);
-        Storage<Friend>.WriteJson(path, filteredList);
+        Storage<Friend>.WriteJson(_path, filteredList);
+    }
+    private List<Friend> LoadFriends()
+    {
+        return Storage<Friend>.ReadJson(_path);
     }
 
 }
