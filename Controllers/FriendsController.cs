@@ -67,22 +67,53 @@ public class FriendsController : ControllerBase
     [HttpPost()]
     public ActionResult AddFriend(Friend friend)
     {
-        var newFriend = CreateFriend(friend);
+        var newFriend = Create(friend);
+
+        // CreatedAtAction function makes an url for FindFriend() method(first argument, second argument provides the argument that FindFriend method needs, 3rd argument is returning the new friend in the body of the http result.)
         return CreatedAtAction(nameof(FindFriend), new { id = newFriend.Id }, newFriend);
     }
-    private Friend CreateFriend(Friend friend)
+    [HttpDelete("id")]
+    public ActionResult DeleteFriend(int id)
+    {
+        Remove(id);
+        return NoContent();
+    }
+    [HttpPut("{id}")]
+    public ActionResult UpdateFriend(Friend friend, int id)
+    {
+        Update(id, friend);
+        return NoContent();
+    }
+    private Friend Create(Friend friend)
     {
         var path = string.Concat(_environment.ContentRootPath, "/Data/friends.json");
         var friends = Storage<Friend>.ReadJson(path);
         friend.Id = friends.Count + 1;
         friends.Add(friend);
-        SaveFriend(friends);
+        Save(friends);
 
         return friend;
     }
-    private void SaveFriend(List<Friend> list)
+    private void Save(List<Friend> list)
     {
         Storage<Friend>.WriteJson(path = string.Concat(_environment.ContentRootPath, "/Data/friends.json"), list);
+    }
+
+    private void Remove(int id)
+    {
+        var path = string.Concat(_environment.ContentRootPath, "/Data/friends.json");
+        var friends = Storage<Friend>.ReadJson(path);
+        var toDelete = friends.SingleOrDefault(Friend => Friend.Id == id);
+        Friend.Remove(toDelete);
+        Storage<Friend>.WriteJson(path, friends);
+    }
+    private void Update(int id, Friend updatedFriend)
+    {
+        var path = string.Concat(_environment.ContentRootPath, "/Data/friends.json");
+        var friends = Storage<Friend>.ReadJson(path);
+        var filteredList = friends.FindAll(vehicle => vehicle.Id != id);
+        filteredList.Add(updatedFriend);
+        Storage<Friend>.WriteJson(path, filteredList);
     }
 
 }
